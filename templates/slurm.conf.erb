@@ -194,7 +194,9 @@ Waittime=<%= @wait_time %>
 
 
 # SCHEDULING
+<%= @def_cpu_per_gpu.nil? ? '#DefCpuPerGPU=' : ('DefCpuPerGPU=' + @def_cpu_per_gpu.to_s) %>
 <%= @def_mem_per_cpu==0 ? '#DefMemPerCPU=' : ('DefMemPerCPU=' + @def_mem_per_cpu.to_s) %>
+<%= @def_mem_per_gpu==0 ? '#DefMemPerGPU=' : ('DefMemPerGPU=' + @def_mem_per_gpu.to_s) %>
 <%= @def_mem_per_node==0 ? '#DefMemPerNode=' : ('DefMemPerNode=' + @def_mem_per_node.to_s) %>
 <%= @epilog.nil? ? '#Epilog=' : ('Epilog=' + @epilog) %>
 <%= @epilog_slurmctld.nil? ? '#EpilogSlurmctld=' : ('EpilogSlurmctld=' + @epilog_slurmctld) %>
