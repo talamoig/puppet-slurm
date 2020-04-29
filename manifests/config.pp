@@ -124,7 +124,9 @@ class slurm::config (
   Integer[0] $unkillable_step_timeout = 60,
   Integer[0] $wait_time = 0,
 
+  Optional[Integer[0]] $def_cpu_per_gpu = undef,
   Integer[0] $def_mem_per_cpu = 0,
+  Integer[0] $def_mem_per_gpu = 0,
   Integer[0] $def_mem_per_node = 0,
   Optional[String] $epilog = undef,
   Optional[String] $epilog_slurmctld = undef,
@@ -144,8 +146,8 @@ class slurm::config (
   Integer[0] $scheduler_time_slice = 30,
   Enum['sched/backfill','sched/builtin','sched/hold'] $scheduler_type = 'sched/backfill',
   Optional[Array[String]] $scheduler_parameters = undef,
-  Enum['select/bluegene','select/cons_res','select/cray','select/linear','select/serial'] $select_type = 'select/linear',
-  Optional[Array[Enum['OTHER_CONS_RES','NHC_ABSOLUTELY_NO','NHC_NO_STEPS','NHC_NO','CR_CPU','CR_CPU_Memory','CR_Core','CR_Core_Memory','CR_ONE_TASK_PER_CORE','CR_CORE_DEFAULT_DIST_BLOCK','CR_LLN','CR_Pack_Nodes','CR_Socket','CR_Socket_Memory','CR_Memory']]] $select_type_parameters = undef,
+  Enum['select/bluegene','select/cons_res','select/cons_tres','select/cray','select/linear','select/serial'] $select_type = 'select/linear',
+  Optional[Array[Enum['OTHER_CONS_RES','OTHER_CONS_TRES','NHC_ABSOLUTELY_NO','NHC_NO_STEPS','NHC_NO','CR_CPU','CR_CPU_Memory','CR_Core','CR_Core_Memory','CR_ONE_TASK_PER_CORE','CR_CORE_DEFAULT_DIST_BLOCK','CR_LLN','CR_Pack_Nodes','CR_Socket','CR_Socket_Memory','CR_Memory']]] $select_type_parameters = undef,
   Integer[0] $vsize_factor = 0,
 
   Enum['priority/basic','priority/multifactor'] $priority_type = 'priority/basic',
