@@ -17,18 +17,26 @@
 #
 
 # SLURMCTLD HOSTS
-<% unless @control_machine.nil? -%>ControlMachine=<%= @control_machine %> # Deprecated option, see SlurmctldHost
+<% unless @control_machine.nil? -%>ControlMachine=<%= @control_machine %> # Deprecated option, see SlurmctldHost<% end %>
 <% unless @control_addr.nil? -%>ControlAddr=<%= @control_addr %> # Deprecated option, see SlurmctldHost
+<% end -%>
 <% unless @backup_controller.nil? -%>BackupController=<%= @backup_controller %> # Deprecated option, see SlurmctldHost
+<% end -%>
 <% unless @backup_addr.nil? -%>BackupAddr=<%= @backup_addr %> # Deprecated option, see SlurmctldHost
+<% end -%>
 
 <% unless @slurmctld_addr.nil? -%>SlurmctldAddr=<%= @slurmctld_addr %>
+<% end -%>
 <% unless @slurmctld_host.nil? -%>SlurmctldHost=<%= @slurmctld_host %>
+<% end -%>
 
 # SLURMCTLD PARAMETERS
 <% unless @slurmctld_parameters.nil? -%>SlurmctldParameters=<%= @slurmctld_parameter.join(',') %>
+<% end -%>
 <% unless @slurmctld_primary_off_prog? -%>SlurmctldPrimaryOffProg=<%= @slurmctld_primary_off_prog %>
+<% end -%>
 <% unless @slurmctld_primary_on_prog? -%>SlurmctldPrimaryOnProg=<%= @slurmctld_primary_on_prog %>
+<% end -%>
 
 # GENERAL OPTIONS
 AllowSpecResourcesUsage=<%= @allow_spec_resources_usage %>
@@ -341,6 +349,7 @@ DebugFlags=<%= @debug_flags.join(',') %>
 LogTimeFormat=<%= @log_time_format %>
 SlurmctldDebug=<%= @slurmctld_debug %>
 <% unless @slurmctld_syslog_debug.nil? -%>SlurmctldSyslogDebug=<%= @slurmctld_syslog_debug %>
+<% end -%>
 <%= @slurmctld_log_file.nil? ? '#SlurmctldLogFile=' : ('SlurmctldLogFile=' + @slurmctld_log_file) %>
 SlurmdDebug=<%= @slurmd_debug %>
 <% if @slurmd_syslog_debug -%>
