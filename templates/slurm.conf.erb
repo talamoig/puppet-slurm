@@ -17,26 +17,21 @@
 #
 
 # SLURMCTLD HOSTS
-<% unless @control_machine.nil? -%>ControlMachine=<%= @control_machine %> # Deprecated option, see SlurmctldHost<% end %>
-<% unless @control_addr.nil? -%>ControlAddr=<%= @control_addr %> # Deprecated option, see SlurmctldHost
+<%= @slurmctld_addr.nil? ? '#SlurmctldAddr=' : ('SlurmctldAddr=' + @slurmctld_addr) %>
+<%= @slurmctld_host.nil? ? '#SlurmctldHost=' : ('SlurmctldHost=' + @slurmctld_host) %>
+<% unless @control_machine.nil? -%>
+ControlMachine=<%= @control_machine %> # Deprecated option, see SlurmctldHost
 <% end -%>
-<% unless @backup_controller.nil? -%>BackupController=<%= @backup_controller %> # Deprecated option, see SlurmctldHost
+<% unless @control_addr.nil? -%>
+ControlAddr=<%= @control_addr %> # Deprecated option, see SlurmctldHost
 <% end -%>
-<% unless @backup_addr.nil? -%>BackupAddr=<%= @backup_addr %> # Deprecated option, see SlurmctldHost
+<% unless @backup_controller.nil? -%>
+BackupController=<%= @backup_controller %> # Deprecated option, see SlurmctldHost
+<% end -%>
+<% unless @backup_addr.nil? -%>
+BackupAddr=<%= @backup_addr %> # Deprecated option, see SlurmctldHost
 <% end -%>
 
-<% unless @slurmctld_addr.nil? -%>SlurmctldAddr=<%= @slurmctld_addr %>
-<% end -%>
-<% unless @slurmctld_host.nil? -%>SlurmctldHost=<%= @slurmctld_host %>
-<% end -%>
-
-# SLURMCTLD PARAMETERS
-<% unless @slurmctld_parameters.nil? -%>SlurmctldParameters=<%= @slurmctld_parameter.join(',') %>
-<% end -%>
-<% unless @slurmctld_primary_off_prog? -%>SlurmctldPrimaryOffProg=<%= @slurmctld_primary_off_prog %>
-<% end -%>
-<% unless @slurmctld_primary_on_prog? -%>SlurmctldPrimaryOnProg=<%= @slurmctld_primary_on_prog %>
-<% end -%>
 
 # GENERAL OPTIONS
 AllowSpecResourcesUsage=<%= @allow_spec_resources_usage %>
@@ -135,22 +130,21 @@ ReturnToService=<%= @return_to_service %>
 <% else -%>
 SbcastParameters=<%= @sbcast_parameters.map{|pair| pair.join('=')}.join(',') %>
 <% end -%>
-<%#                                                                          -%>
+<%# SLURMCTLD GENERAL OPTIONS                                                -%>
 SlurmctldPidFile=<%= @slurmctld_pid_file %>
 <%= @slurmctld_plugstack.nil? ? '#SlurmctldPlugstack=' : ('SlurmctldPlugstack=' + @slurmctld_plugstack.join(',')) %>
 SlurmctldPort=<%= @slurmctld_port %>
+<%= @slurmctld_parameters.nil? ? '#SlurmctldParameters=' : ('SlurmctldParameters=' + @slurmctld_parameters.join(',')) %>
+<%= @slurmctld_primary_off_prog.nil? ? '#SlurmctldPrimaryOffProg=' : ('SlurmctldPrimaryOffProg=' + @slurmctld_primary_off_prog) %>
+<%= @slurmctld_primary_on_prog.nil? ? '#SlurmctldPrimaryOnProg=' : ('SlurmctldPrimaryOnProg=' + @slurmctld_primary_on_prog) %>
+<%# SLURMD GENERAL OPTIONS                                                   -%>
 SlurmdPidFile=<%= @slurmd_pid_file %>
-<%# comment out if empty, expand array if not                                -%>
-<% if @slurmd_plugstack.nil? -%>
-#SlurmdPlugstack=
-<% else -%>
-SlurmdPlugstack=<%= @slurmd_plugstack.join(',') %>
-<% end -%>
-<%#                                                                          -%>
+<%= @slurmd_plugstack.nil? ? '#SlurmdPlugstack=' : ('SlurmdPlugstack=' + @slurmd_plugstack.join(',')) %>
 SlurmdPort=<%= @slurmd_port %>
 SlurmdSpoolDir=<%= @slurmd_spool_dir %>
 SlurmUser=<%= @slurm_user %>
 SlurmdUser=<%= @slurmd_user %>
+<%# SRUN GENERAL OPTIONS                                                     -%>
 <%= @srun_epilog.nil? ? '#SrunEpilog=' : ('SrunEpilog=' + @srun_epilog) %>
 <%= @srun_prolog.nil? ? '#SrunProlog=' : ('SrunProlog=' + @srun_prolog) %>
 <%= @srun_port_range.nil? ? '#SrunPortRange=' : ('SrunPortRange=' + @srun_port_range) %>
@@ -390,18 +384,21 @@ TopologyParam=<%= @topology_param.join(',') %>
 RoutePlugin=<%= @route_plugin %>
 TreeWidth=<%= @tree_width %>
 
-
 # COMPUTE NODES
 <% @workernodes.each do |workernode| -%>
 <%= workernode.map{|pair| pair.join('=')}.join(' ') %>
-<% end %>
+<% end -%>
+
 
 # NODE SETS
+<% unless @nodesets.nil? -%>
 <% @nodesets.each do |nodeset| -%>
 <%= nodeset.map{|pair| pair.join('=')}.join(' ') %>
-<% end %>
+<% end -%>
+<% end -%>
+
 
 # PARTITIONS
 <% @partitions.each do |partition| -%>
 <%= partition.map{|pair| pair.join('=')}.join(' ') %>
-<% end %>
+<% end -%>
