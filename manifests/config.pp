@@ -14,10 +14,17 @@
 #
 
 class slurm::config (
-  String $control_machine,
-  String $control_addr = $control_machine,
+  # DEPRECATRED SETTINGS
+  Optional[String] $control_machine = undef,
+  Optional[String] $control_addr = $control_machine,
   Optional[String] $backup_controller = undef,
   Optional[String] $backup_addr = $backup_controller,
+  # NEW SETTINGS
+  Optional[String] $slurmctld_addr = undef,
+  Optional[String] $slurmctld_host = undef,
+  Optional[Array]  $slurmctld_parameter = undef,
+  Optional[String] $slurmctld_primary_off_prog = undef,
+  Optional[String] $slurmctld_primary_on_prog = undef,
   Integer[0,1] $allow_spec_resources_usage = 0,
   Enum['checkpoint/blcr','checkpoint/none','checkpoint/ompi','checkpoint/poe'] $checkpoint_type= 'checkpoint/none',
   Optional[String] $chos_loc = undef,
@@ -68,10 +75,10 @@ class slurm::config (
   Optional[Hash[Enum['DestDir','Compression'],String]] $sbcast_parameters = undef,
   String $slurmctld_pid_file = '/var/run/slurmctld.pid',
   Optional[Array[String]] $slurmctld_plugstack = undef,
-  Integer[1] $slurmctld_port = 6817,
+  String $slurmctld_port = "6817",
   String $slurmd_pid_file = '/var/run/slurmd.pid',
   Optional[Array[String]] $slurmd_plugstack = undef,
-  Integer[1] $slurmd_port = 6818,
+  String $slurmd_port = "6818",
   String $slurmd_spool_dir = '/var/spool/slurmd',
   String $slurm_user = 'root',
   String $slurmd_user = 'root',
@@ -146,12 +153,12 @@ class slurm::config (
   Integer[0] $scheduler_time_slice = 30,
   Enum['sched/backfill','sched/builtin','sched/hold'] $scheduler_type = 'sched/backfill',
   Optional[Array[String]] $scheduler_parameters = undef,
-  Enum['select/bluegene','select/cons_res','select/cons_tres','select/cray','select/linear','select/serial'] $select_type = 'select/linear',
-  Optional[Array[Enum['OTHER_CONS_RES','OTHER_CONS_TRES','NHC_ABSOLUTELY_NO','NHC_NO_STEPS','NHC_NO','CR_CPU','CR_CPU_Memory','CR_Core','CR_Core_Memory','CR_ONE_TASK_PER_CORE','CR_CORE_DEFAULT_DIST_BLOCK','CR_LLN','CR_Pack_Nodes','CR_Socket','CR_Socket_Memory','CR_Memory']]] $select_type_parameters = undef,
+  Enum['select/cons_res','select/cray_aries','select/linear','select/cons_tres'] $select_type = 'select/linear',
+  Optional[Array[Enum['OTHER_CONS_RES','OTHER_CONS_TRES','CR_CPU','CR_CPU_Memory','CR_Core','CR_Core_Memory','CR_ONE_TASK_PER_CORE','CR_CORE_DEFAULT_DIST_BLOCK','CR_LLN','CR_Pack_Nodes','CR_Socket','CR_Socket_Memory','CR_Memory']]] $select_type_parameters = undef,
   Integer[0] $vsize_factor = 0,
 
   Enum['priority/basic','priority/multifactor'] $priority_type = 'priority/basic',
-  Optional[Array[Enum['ACCRUE_ALWAYS','CALCULATE_RUNNING','DEPTH_OBLIVIOUS','FAIR_TREE','INCR_ONLY','MAX_TRES','SMALL_RELATIVE_TO_TIME']]] $priority_flags = undef,
+  Optional[Array[String]] $priority_flags = undef,
   Integer[0] $priority_calc_period = 5,
   String $priority_decay_half_life = '7-0',
   Enum['NO','YES'] $priority_favor_small = 'NO',
