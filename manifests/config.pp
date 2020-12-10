@@ -21,14 +21,14 @@ class slurm::config (
   Optional[String] $backup_addr = $backup_controller,
   # NEW SETTINGS
   Optional[String] $slurmctld_addr = undef,
-  Optional[String] $slurmctld_host = undef,
+  Optional[Array]  $slurmctld_host = undef,
   Optional[Array]  $slurmctld_parameter = undef,
   Optional[String] $slurmctld_primary_off_prog = undef,
   Optional[String] $slurmctld_primary_on_prog = undef,
   Integer[0,1] $allow_spec_resources_usage = 0,
   Enum['checkpoint/blcr','checkpoint/none','checkpoint/ompi','checkpoint/poe'] $checkpoint_type= 'checkpoint/none',
   Optional[String] $chos_loc = undef,
-  Enum['core_spec/cray','core_spec/none'] $core_spec_plugin = 'core_spec/none',
+  Enum['core_spec/cray_aries','core_spec/none'] $core_spec_plugin = 'core_spec/none',
   Enum['Conservative','OnDemand','Performance','PowerSave'] $cpu_freq_def = 'Performance',
   Array[Enum['Conservative','OnDemand','Performance','PowerSave','UserSpace']] $cpu_freq_governors = ['OnDemand','Performance'],
   Enum['NO','YES'] $disable_root_jobs = 'NO',
@@ -235,6 +235,7 @@ class slurm::config (
   Integer[1] $tree_width = 50,
 
   Array[Hash,1] $workernodes,
+  Optional[Array[Hash,1]] $nodesets = undef,
   Array[Hash,1] $partitions,
   Optional[Array[Hash,1]] $gres_definitions = undef,
 
