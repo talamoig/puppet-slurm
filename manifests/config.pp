@@ -22,7 +22,7 @@ class slurm::config (
   # NEW SETTINGS
   Optional[String] $slurmctld_addr = undef,
   Optional[Array]  $slurmctld_host = undef,
-  Optional[Array]  $slurmctld_parameter = undef,
+  Optional[Array]  $slurmctld_parameters = undef,
   Optional[String] $slurmctld_primary_off_prog = undef,
   Optional[String] $slurmctld_primary_on_prog = undef,
   Integer[0,1] $allow_spec_resources_usage = 0,
@@ -37,6 +37,7 @@ class slurm::config (
   Integer[0] $ext_sensors_freq = 0,
   Integer[1] $first_job_id = 1,
   Integer[1] $max_job_id = 999999,
+  Optional[Array[String]] $federation_parameters = undef,
   Optional[Array[String]] $gres_types = undef,
   Integer[0,1] $group_update_force = 0,
   String $job_checkpoint_dir = '/var/slurm/checkpoint',

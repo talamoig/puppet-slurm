@@ -29,6 +29,7 @@ ExtSensorsType=<%= @ext_sensors_type %>
 ExtSensorsFreq=<%= @ext_sensors_freq %>
 FirstJobId=<%= @first_job_id %>
 MaxJobId=<%= @max_job_id %>
+<%= @federation_parameters.nil? ? '#FederationParameters=' : ('FederationParameters=' + @federation_parameters.join(',')) %>
 <%= @gres_types.nil? ? '#GresTypes=' : ('GresTypes=' + @gres_types.join(',')) %>
 GroupUpdateForce=<%= @group_update_force %>
 JobCheckpointDir=<%= @job_checkpoint_dir %>
