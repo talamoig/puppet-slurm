@@ -16,27 +16,6 @@
 # Configuration file containing common parameters for headnode and workernode.
 #
 
-# SLURMCTLD HOSTS
-<% unless @slurmctld_host.nil? -%>
-<% @slurmctld_host.each do |slurmctld| -%>
-SlurmctldHost=<%= slurmctld %>
-<% end -%>
-<% else %>
-#SlurmctldHost=
-<% unless @control_machine.nil? -%>
-ControlMachine=<%= @control_machine %> # Deprecated option, see SlurmctldHost
-<% end -%>
-<% unless @control_addr.nil? -%>
-ControlAddr=<%= @control_addr %> # Deprecated option, see SlurmctldHost
-<% end -%>
-<% unless @backup_controller.nil? -%>
-BackupController=<%= @backup_controller %> # Deprecated option, see SlurmctldHost
-<% end -%>
-<% unless @backup_addr.nil? -%>
-BackupAddr=<%= @backup_addr %> # Deprecated option, see SlurmctldHost
-<% end -%>
-<% end -%>
-
 # GENERAL OPTIONS
 AllowSpecResourcesUsage=<%= @allow_spec_resources_usage %>
 CheckpointType=<%= @checkpoint_type %>
@@ -136,6 +115,25 @@ SbcastParameters=<%= @sbcast_parameters.map{|pair| pair.join('=')}.join(',') %>
 <% end -%>
 <%# SLURMCTLD GENERAL OPTIONS                                                -%>
 <%= @slurmctld_addr.nil? ? '#SlurmctldAddr=' : ('SlurmctldAddr=' + @slurmctld_addr) %>
+<% unless @slurmctld_host.nil? -%>
+<% @slurmctld_host.each do |slurmctld| -%>
+SlurmctldHost=<%= slurmctld %>
+<% end -%>
+<% else %>
+#SlurmctldHost=
+<% unless @control_machine.nil? -%>
+ControlMachine=<%= @control_machine %> # Deprecated option, see SlurmctldHost
+<% end -%>
+<% unless @control_addr.nil? -%>
+ControlAddr=<%= @control_addr %> # Deprecated option, see SlurmctldHost
+<% end -%>
+<% unless @backup_controller.nil? -%>
+BackupController=<%= @backup_controller %> # Deprecated option, see SlurmctldHost
+<% end -%>
+<% unless @backup_addr.nil? -%>
+BackupAddr=<%= @backup_addr %> # Deprecated option, see SlurmctldHost
+<% end -%>
+<% end -%>
 SlurmctldPidFile=<%= @slurmctld_pid_file %>
 <%= @slurmctld_plugstack.nil? ? '#SlurmctldPlugstack=' : ('SlurmctldPlugstack=' + @slurmctld_plugstack.join(',')) %>
 SlurmctldPort=<%= @slurmctld_port %>
