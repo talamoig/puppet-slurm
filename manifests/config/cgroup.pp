@@ -47,12 +47,23 @@ class slurm::config::cgroup (
   Float[0,100] $max_kmem_percent = 100.0,
   Enum['no','yes'] $constrain_devices = 'no',
   String $allowed_devices_file = '/etc/slurm/cgroup_allowed_devices_file.conf',
+  Array $allowed_devices_list = [],
 ) {
 
   # Cgroup configuration
   file{ '/etc/slurm/cgroup.conf':
     ensure  => file,
     content => template('slurm/cgroup.conf.erb'),
+    owner   => 'slurm',
+    group   => 'slurm',
+    mode    => '0644',
+    require => User['slurm'],
+  }
+
+  # Cgroup Device list configuration
+  file{ "$allowed_devices_file":
+    ensure  => file,
+    content => template('slurm/cgroup_allowed_devices_file.conf.erb'),
     owner   => 'slurm',
     group   => 'slurm',
     mode    => '0644',
