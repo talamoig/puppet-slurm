@@ -12,8 +12,23 @@
 #
 
 class slurm::headnode::config (
+  Optional[String] $slurmctld_options = undef,
   Boolean $refresh_service = true,
 ) {
+
+  if $slurmctld_options {
+    file { "/etc/sysconfig/slurmctld":
+      before  => Service["slurmctld"],
+      content => @("END"),
+          SLURMCTLD_OPTIONS="$slurmctld_options"
+          | END
+    }
+  } else {
+    file { "/etc/sysconfig/slurmctld":
+      before  => Service["slurmctld"],
+      ensure  => absent;
+    }
+  }
 
   service{'slurmctld':
     ensure    => running,
