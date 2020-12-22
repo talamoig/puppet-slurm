@@ -25,7 +25,6 @@ class slurm::config (
   Optional[String] $slurmctld_primary_off_prog = undef,
   Optional[String] $slurmctld_primary_on_prog = undef,
   Optional[Array]  $slurmctld_parameters = undef,
-  Boolean          $deploy_config_files = true,
   Integer[0,1] $allow_spec_resources_usage = 0,
   Enum['checkpoint/blcr','checkpoint/none','checkpoint/ompi','checkpoint/poe'] $checkpoint_type= 'checkpoint/none',
   Optional[String] $chos_loc = undef,
