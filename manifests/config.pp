@@ -14,14 +14,21 @@
 #
 
 class slurm::config (
-  String $control_machine,
-  String $control_addr = $control_machine,
+  # DEPRECATRED SETTINGS
+  Optional[String] $control_machine = undef,
+  Optional[String] $control_addr = $control_machine,
   Optional[String] $backup_controller = undef,
   Optional[String] $backup_addr = $backup_controller,
+  # NEW SETTINGS
+  Optional[String] $slurmctld_addr = undef,
+  Optional[Array]  $slurmctld_host = undef,
+  Optional[String] $slurmctld_primary_off_prog = undef,
+  Optional[String] $slurmctld_primary_on_prog = undef,
+  Optional[Array]  $slurmctld_parameters = undef,
   Integer[0,1] $allow_spec_resources_usage = 0,
   Enum['checkpoint/blcr','checkpoint/none','checkpoint/ompi','checkpoint/poe'] $checkpoint_type= 'checkpoint/none',
   Optional[String] $chos_loc = undef,
-  Enum['core_spec/cray','core_spec/none'] $core_spec_plugin = 'core_spec/none',
+  Enum['core_spec/cray_aries','core_spec/none'] $core_spec_plugin = 'core_spec/none',
   Enum['Conservative','OnDemand','Performance','PowerSave'] $cpu_freq_def = 'Performance',
   Array[Enum['Conservative','OnDemand','Performance','PowerSave','UserSpace']] $cpu_freq_governors = ['OnDemand','Performance'],
   Enum['NO','YES'] $disable_root_jobs = 'NO',
@@ -30,6 +37,7 @@ class slurm::config (
   Integer[0] $ext_sensors_freq = 0,
   Integer[1] $first_job_id = 1,
   Integer[1] $max_job_id = 999999,
+  Optional[Array[String]] $federation_parameters = undef,
   Optional[Array[String]] $gres_types = undef,
   Integer[0,1] $group_update_force = 0,
   String $job_checkpoint_dir = '/var/slurm/checkpoint',
@@ -46,7 +54,7 @@ class slurm::config (
   Optional[String] $mail_domain = undef,
   Integer[1] $max_job_count = 10000,
   Integer[1] $max_step_count = 40000,
-  Enum['no','yes'] $mem_limit_enforce = 'no',
+  Optional[Enum['no','yes']] $mem_limit_enforce = undef,
   Hash[Enum['WindowMsgs','WindowTime'],Integer[1]] $msg_aggregation_params = {'WindowMsgs' => 1, 'WindowTime' => 100},
   String $plugin_dir = '/usr/local/lib/slurm',
   Optional[String] $plug_stack_config = undef,
@@ -68,10 +76,10 @@ class slurm::config (
   Optional[Hash[Enum['DestDir','Compression'],String]] $sbcast_parameters = undef,
   String $slurmctld_pid_file = '/var/run/slurmctld.pid',
   Optional[Array[String]] $slurmctld_plugstack = undef,
-  Integer[1] $slurmctld_port = 6817,
+  String $slurmctld_port = "6817",
   String $slurmd_pid_file = '/var/run/slurmd.pid',
   Optional[Array[String]] $slurmd_plugstack = undef,
-  Integer[1] $slurmd_port = 6818,
+  String $slurmd_port = "6818",
   String $slurmd_spool_dir = '/var/spool/slurmd',
   String $slurm_user = 'root',
   String $slurmd_user = 'root',
@@ -130,7 +138,7 @@ class slurm::config (
   Integer[0] $def_mem_per_node = 0,
   Optional[String] $epilog = undef,
   Optional[String] $epilog_slurmctld = undef,
-  Integer[0,2] $fast_schedule = 1,
+  Optional[Integer[0,2]] $fast_schedule = undef,
   Integer[0] $max_array_size = 1001,
   Integer[0] $max_mem_per_cpu = 0,
   Integer[0] $max_mem_per_node = 0,
@@ -146,12 +154,12 @@ class slurm::config (
   Integer[0] $scheduler_time_slice = 30,
   Enum['sched/backfill','sched/builtin','sched/hold'] $scheduler_type = 'sched/backfill',
   Optional[Array[String]] $scheduler_parameters = undef,
-  Enum['select/bluegene','select/cons_res','select/cons_tres','select/cray','select/linear','select/serial'] $select_type = 'select/linear',
-  Optional[Array[Enum['OTHER_CONS_RES','OTHER_CONS_TRES','NHC_ABSOLUTELY_NO','NHC_NO_STEPS','NHC_NO','CR_CPU','CR_CPU_Memory','CR_Core','CR_Core_Memory','CR_ONE_TASK_PER_CORE','CR_CORE_DEFAULT_DIST_BLOCK','CR_LLN','CR_Pack_Nodes','CR_Socket','CR_Socket_Memory','CR_Memory']]] $select_type_parameters = undef,
+  Enum['select/cons_res','select/cray_aries','select/linear','select/cons_tres'] $select_type = 'select/linear',
+  Optional[Array[Enum['OTHER_CONS_RES','OTHER_CONS_TRES','CR_CPU','CR_CPU_Memory','CR_Core','CR_Core_Memory','CR_ONE_TASK_PER_CORE','CR_CORE_DEFAULT_DIST_BLOCK','CR_LLN','CR_Pack_Nodes','CR_Socket','CR_Socket_Memory','CR_Memory']]] $select_type_parameters = undef,
   Integer[0] $vsize_factor = 0,
 
   Enum['priority/basic','priority/multifactor'] $priority_type = 'priority/basic',
-  Optional[Array[Enum['ACCRUE_ALWAYS','CALCULATE_RUNNING','DEPTH_OBLIVIOUS','FAIR_TREE','INCR_ONLY','MAX_TRES','SMALL_RELATIVE_TO_TIME']]] $priority_flags = undef,
+  Optional[Array[String]] $priority_flags = undef,
   Integer[0] $priority_calc_period = 5,
   String $priority_decay_half_life = '7-0',
   Enum['NO','YES'] $priority_favor_small = 'NO',
@@ -228,11 +236,13 @@ class slurm::config (
   Integer[1] $tree_width = 50,
 
   Array[Hash,1] $workernodes,
+  Optional[Array[Hash,1]] $nodesets = undef,
   Array[Hash,1] $partitions,
   Optional[Array[Hash,1]] $gres_definitions = undef,
 
   Boolean $open_firewall = false,
   Array[String] $munge_packages = $slurm::params::munge_packages,
+
 ) inherits slurm::params {
 
   # The following variables are version dependent
@@ -323,82 +333,102 @@ class slurm::config (
     $openssl_credential_files = []
   }
 
-  # Common SLURM configuration file
-  file{'/etc/slurm/slurm.conf':
-    ensure  => file,
-    content => template('slurm/slurm.conf.erb'),
-    owner   => 'slurm',
-    group   => 'slurm',
-    mode    => '0644',
-    require => User['slurm'],
-  }
+  # Check whether config files should be deployed or not
+  #   if this is a 'head', 'db-head' or 'db' node always deploy.
+  #   if this is a different node (i.e. 'worker', 'client'), optionally deploy config files
+  if (   $slurm::node_type in ["head","db-head","db"]                                                      ) or 
+     ( !($slurm::node_type in ["head","db-head","db"]) and !('enable_configless' in $slurmctld_parameters) ) {
 
-  # Plugin loader
-  file{ '/etc/slurm/plugstack.conf':
-    ensure  => file,
-    content => template('slurm/plugstack.conf.erb'),
-    owner   => 'slurm',
-    group   => 'slurm',
-    mode    => '0644',
-    require => User['slurm'],
-  }
-
-  # Accounting gatherer configuration file
-  if  ('acct_gather_energy/ipmi' in $acct_gather_energy_type) or
-      ('acct_gather_profile/hdf5' in $acct_gather_profile_type) or
-      ('acct_gather_profile/influxdb' in $acct_gather_profile_type) or
-      (['acct_gather_infiniband/ofed', 'acct_gather_interconnect/ofed'] in $acct_gather_interconnect_type) {
-    class{ '::slurm::config::acct_gather':
-      with_energy_ipmi       => ('acct_gather_energy/ipmi' in $acct_gather_energy_type),
-      with_profile_hdf5      => ('acct_gather_profile/hdf5' in $acct_gather_profile_type),
-      with_profile_influxdb  => ('acct_gather_profile/influxdb' in $acct_gather_profile_type),
-      with_interconnect_ofed => (['acct_gather_infiniband/ofed', 'acct_gather_interconnect/ofed'] in $acct_gather_interconnect_type),
+    # Common SLURM configuration file
+    file{'/etc/slurm/slurm.conf':
+      ensure  => file,
+      content => template('slurm/slurm.conf.erb'),
+      owner   => 'slurm',
+      group   => 'slurm',
+      mode    => '0644',
+      require => User['slurm'],
     }
 
-    $acct_gather_conf_file = ['/etc/slurm/acct_gather.conf']
-  }
-  else {
-    $acct_gather_conf_file = []
-  }
-
-  # Cgroup configuration file
-  if  ('proctrack/cgroup' in $proctrack_type) or
-      ('task/cgroup' in $task_plugin) or
-      ('jobacct_gather/cgroup' in $job_acct_gather_type) {
-    class{ '::slurm::config::cgroup':}
-
-    $cgroup_conf_file = ['/etc/slurm/cgroup.conf']
-  }
-  else {
-    $cgroup_conf_file = []
-  }
-
-  # GRES configuration file
-  if  $gres_definitions {
-    class{ '::slurm::config::gres':
-      gres_definitions => $gres_definitions,
+    # Plugin loader
+    file{ '/etc/slurm/plugstack.conf':
+      ensure  => file,
+      content => template('slurm/plugstack.conf.erb'),
+      owner   => 'slurm',
+      group   => 'slurm',
+      mode    => '0644',
+      require => User['slurm'],
     }
 
-    $gres_conf_file = ['/etc/slurm/gres.conf']
-  }
-  else {
-    $gres_conf_file = []
-  }
+    # Accounting gatherer configuration file
+    if  ('acct_gather_energy/ipmi' in $acct_gather_energy_type) or
+        ('acct_gather_profile/hdf5' in $acct_gather_profile_type) or
+        ('acct_gather_profile/influxdb' in $acct_gather_profile_type) or
+        (['acct_gather_infiniband/ofed', 'acct_gather_interconnect/ofed'] in $acct_gather_interconnect_type) {
+      class{ '::slurm::config::acct_gather':
+        with_energy_ipmi       => ('acct_gather_energy/ipmi' in $acct_gather_energy_type),
+        with_profile_hdf5      => ('acct_gather_profile/hdf5' in $acct_gather_profile_type),
+        with_profile_influxdb  => ('acct_gather_profile/influxdb' in $acct_gather_profile_type),
+        with_interconnect_ofed => (['acct_gather_infiniband/ofed', 'acct_gather_interconnect/ofed'] in $acct_gather_interconnect_type),
+      }
 
-  # Topology plugin configuration file
-  if  ('topology/tree' in $topology_plugin) {
-    class{ '::slurm::config::topology':}
-    $topology_conf_file = ['/etc/slurm/topology.conf']
-  }
-  else {
-    $topology_conf_file = []
-  }
+      $acct_gather_conf_file = ['/etc/slurm/acct_gather.conf']
+    }
+    else {
+      $acct_gather_conf_file = []
+    }
 
-  $common_config_files = [
-    '/etc/slurm/plugstack.conf',
-    '/etc/slurm/slurm.conf',
-  ]
+    # Cgroup configuration file
+    if  ('proctrack/cgroup' in $proctrack_type) or
+        ('task/cgroup' in $task_plugin) or
+        ('jobacct_gather/cgroup' in $job_acct_gather_type) {
+      class{ '::slurm::config::cgroup':}
 
-  $required_files = concat($openssl_credential_files, $acct_gather_conf_file, $cgroup_conf_file, $topology_conf_file, $gres_conf_file, $common_config_files)
+      $cgroup_conf_file = ['/etc/slurm/cgroup.conf']
+    }
+    else {
+      $cgroup_conf_file = []
+    }
+
+    # GRES configuration file
+    if  $gres_definitions {
+      class{ '::slurm::config::gres':
+        gres_definitions => $gres_definitions,
+      }
+
+      $gres_conf_file = ['/etc/slurm/gres.conf']
+    }
+    else {
+      $gres_conf_file = []
+    }
+
+    # Topology plugin configuration file
+    if  ('topology/tree' in $topology_plugin) {
+      class{ '::slurm::config::topology':}
+      $topology_conf_file = ['/etc/slurm/topology.conf']
+    }
+    else {
+      $topology_conf_file = []
+    }
+
+    $common_config_files = [
+      '/etc/slurm/plugstack.conf',
+      '/etc/slurm/slurm.conf',
+    ]
+
+    $required_files = concat($openssl_credential_files, $acct_gather_conf_file, $cgroup_conf_file, $topology_conf_file, $gres_conf_file, $common_config_files)
+  } else {
+
+    file {
+      '/etc/slurm/slurm.conf': ensure => absent;
+      '/etc/slurm/plugstack.conf': ensure => absent;
+      '/etc/slurm/acct_gather.conf': ensure => absent;
+      '/etc/slurm/cgroup.conf': ensure => absent;
+      '/etc/slurm/cgroup_allowed_devices_file.conf': ensure => absent;
+      '/etc/slurm/gres.conf': ensure => absent;
+      '/etc/slurm/topology.conf': ensure => absent;
+    }
+ 
+    $required_files = undef
+  }
 
 }

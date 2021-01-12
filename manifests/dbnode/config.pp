@@ -14,6 +14,7 @@
 #
 
 class slurm::dbnode::config (
+  Optional[String] $slurmdbd_options = undef,
   Boolean $refresh_service = true,
   String $file_name = 'slurmdbd.conf',
   String $dbd_host = 'localhost',
@@ -63,6 +64,20 @@ class slurm::dbnode::config (
 
   if versioncmp('17.11', $slurm::params::slurm_version) > 0 {
     fail('Parameter DebugLevelSyslog is supported from version 17.11 onwards.')
+  }
+
+  if $slurmdbd_options {
+    file { "/etc/sysconfig/slurmdbd":
+      before  => Service["slurmdbd"],
+      content => @("END"),
+          SLURMDBD_OPTIONS="$slurmdbd_options"
+          | END
+    }
+  } else {
+    file { "/etc/sysconfig/slurmdbd":
+      before  => Service["slurmdbd"],
+      ensure  => absent;
+    }
   }
 
   file{ "/etc/slurm/${file_name}":
