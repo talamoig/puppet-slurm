@@ -52,6 +52,7 @@ class slurm::config (
   Optional[Enum['node_features/knl_cray','node_features/knl_generic']] $node_features_plugins = undef,
   String $mail_prog = '/bin/mail',
   Optional[String] $mail_domain = undef,
+  Optional[Intenger[1]] $max_dbd_msgs = undef,
   Integer[1] $max_job_count = 10000,
   Integer[1] $max_step_count = 40000,
   Optional[Enum['no','yes']] $mem_limit_enforce = undef,

@@ -116,6 +116,9 @@ ReturnToService=<%= @return_to_service %>
 SbcastParameters=<%= @sbcast_parameters.map{|pair| pair.join('=')}.join(',') %>
 <% end -%>
 <%# SLURMCTLD GENERAL OPTIONS                                                -%>
+<%= unless @max_dbd_msgs.nil? -%>
+MaxDBDMsgs=<%= max_dbd_msgs %>
+<% end -%>
 <%= @slurmctld_addr.nil? ? '#SlurmctldAddr=' : ('SlurmctldAddr=' + @slurmctld_addr) %>
 <% unless @slurmctld_host.nil? -%>
 <% @slurmctld_host.each do |slurmctld| -%>
