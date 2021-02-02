@@ -16,9 +16,10 @@
 #
 
 class slurm::workernode::setup (
-  String $slurmd_spool_dir = $slurm::config::slurmd_spool_dir,
-  Optional[String] $slurmd_log_file = $slurm::config::slurmd_log_file,
-  Array[String] $extra_packages = $slurm::params::extra_packages,
+  String           $slurmd_spool_dir      = $slurm::config::slurmd_spool_dir,
+  String           $slurmd_spool_dir_mode = '0755',
+  Optional[String] $slurmd_log_file       = $slurm::config::slurmd_log_file,
+  Array[String]    $extra_packages        = $slurm::params::extra_packages,
 ) inherits slurm::params {
 
   ensure_packages($extra_packages, {'ensure' => $slurm::params::slurm_version})
@@ -31,7 +32,7 @@ class slurm::workernode::setup (
     ensure => directory,
     path   => $slurmd_spool_dir,
     group  => 'slurm',
-    mode   => '1755',
+    mode   => $slurmd_spool_dir_mode,
     owner  => 'slurm',
   }
 }

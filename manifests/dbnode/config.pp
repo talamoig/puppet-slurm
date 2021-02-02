@@ -16,6 +16,7 @@
 class slurm::dbnode::config (
   Optional[String] $slurmdbd_options = undef,
   Boolean $refresh_service = true,
+  String $slurmdbd_conf_mode = '0600',
   String $file_name = 'slurmdbd.conf',
   String $dbd_host = 'localhost',
   String $dbd_addr = $dbd_host,
@@ -85,7 +86,7 @@ class slurm::dbnode::config (
     content => template('slurm/slurmdbd.conf.erb'),
     owner   => 'slurm',
     group   => 'slurm',
-    mode    => '0400',
+    mode    => $slurmdbd_conf_mode,
     require => User['slurm'],
   }
 

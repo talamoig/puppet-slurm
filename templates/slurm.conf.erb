@@ -60,7 +60,8 @@ MaxJobCount=<%= @max_job_count %>
 MaxStepCount=<%= @max_step_count %>
 <% unless @mem_limit_enforce.nil? -%>MemLimitEnforce=<%= @mem_limit_enforce %>
 <% end -%>
-MsgAggregationParams=<%= @msg_aggregation_params.map{|pair| pair.join('=')}.join(',') %>
+<% unless @msg_aggregation_params.nil? -%>MsgAggregationParams=<%= @msg_aggregation_params.map{|pair| pair.join('=')}.join(',') %>
+<% end -%>
 PluginDir=<%= @plugin_dir %>
 <%= @plug_stack_config.nil? ? '#PlugStackConfig=' : ('PlugStackConfig=' + @plug_stack_config) %>
 PowerPlugin=<%= @power_plugin %>
@@ -115,6 +116,9 @@ ReturnToService=<%= @return_to_service %>
 SbcastParameters=<%= @sbcast_parameters.map{|pair| pair.join('=')}.join(',') %>
 <% end -%>
 <%# SLURMCTLD GENERAL OPTIONS                                                -%>
+<% unless @max_dbd_msgs.nil? -%>
+MaxDBDMsgs=<%= @max_dbd_msgs.to_s %>
+<% end -%>
 <%= @slurmctld_addr.nil? ? '#SlurmctldAddr=' : ('SlurmctldAddr=' + @slurmctld_addr) %>
 <% unless @slurmctld_host.nil? -%>
 <% @slurmctld_host.each do |slurmctld| -%>
