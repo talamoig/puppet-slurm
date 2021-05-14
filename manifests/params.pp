@@ -19,13 +19,11 @@ class slurm::params(
     'RedHat': {
       $slurm_packages_common = [
         'slurm',
-        'slurm-devel',
         'slurm-libpmi',
       ]
       $munge_packages = [
         'munge',
         'munge-libs',
-        'munge-devel',
       ]
       $slurmdbd_packages_common = [
         'slurm-slurmdbd',
