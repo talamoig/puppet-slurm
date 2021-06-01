@@ -97,7 +97,8 @@ class slurm::config (
   String $tmp_fs = '/tmp',
   Enum['no','yes'] $track_wckey = 'no',
   Optional[String] $unkillable_step_program = undef,
-
+  Optional[Array[String]] $auth_alt_type = undef,
+  Optional[Array[String]] $auth_alt_parameters = undef,
   Enum['auth/none','auth/munge'] $auth_type = 'auth/munge',
   Optional[String] $auth_info = undef,
   Enum['crypto/munge','crypto/openssl'] $crypto_type = 'crypto/munge',
