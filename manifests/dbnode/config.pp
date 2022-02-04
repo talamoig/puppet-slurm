@@ -23,6 +23,8 @@ class slurm::dbnode::config (
   Optional[String] $dbd_backup_host = undef,
   Integer[0] $dbd_port = $slurm::config::accounting_storage_port,
   Enum['auth/none','auth/munge'] $auth_type = 'auth/none',
+  Optional[Array[String]] $auth_alt_type = $slurm::config::auth_alt_type,
+  Optional[Array[String]] $auth_alt_parameters = $slurm::config::auth_alt_parameters,
   Optional[String] $auth_info = undef,
   Optional[String] $default_qos = undef,
   Integer[0] $message_timeout = 10,

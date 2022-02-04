@@ -24,6 +24,8 @@ DbdPort=<%= @dbd_port %>
 
 # SECURITY
 AuthType=<%= @auth_type %>
+<%= @auth_alt_type.nil? ? '#AuthAltTypes=' : ( 'AuthAltTypes=' + @auth_alt_type.join(',')) %>
+<%= @auth_alt_parameters.nil? ? '#AuthAltParameters=' : ( 'AuthAltParameters=' + @auth_alt_parameters.join(',')) %>
 <%= @auth_info.nil? ? '#AuthInfo=' : ('AuthInfo=' + @auth_info) %>
 
 
