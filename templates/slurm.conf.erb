@@ -164,12 +164,7 @@ SlurmdUser=<%= @slurmd_user %>
 StateSaveLocation=<%= @state_save_location %>
 SwitchType=<%= @switch_type %>
 TaskPlugin=<%= @task_plugin.join(',') %>
-<%# comment out if empty, expand array if not                                -%>
-<% if @task_plugin_param.nil? -%>
-#TaskPluginParam=
-<% else -%>
-TaskPluginParam=<%= @task_plugin_param.join(',') %>
-<% end -%>
+<%= @task_plugin_param.nil? ? '#TaskPluginParam=' : ('#TaskPluginParam=' + @task_plugin_param.join(',')) %>
 <%#                                                                          -%>
 <%= @task_epilog.nil? ? '#TaskEpilog=' : ('TaskEpilog=' + @task_epilog) %>
 <%= @task_prolog.nil? ? '#TaskProlog=' : ('TaskProlog=' + @task_prolog) %>
