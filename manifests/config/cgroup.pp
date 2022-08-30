@@ -61,12 +61,14 @@ class slurm::config::cgroup (
   }
 
   # Cgroup Device list configuration
-  file{ "$allowed_devices_file":
-    ensure  => file,
-    content => template('slurm/cgroup_allowed_devices_file.conf.erb'),
-    owner   => 'slurm',
-    group   => 'slurm',
-    mode    => '0644',
-    require => User['slurm'],
+  if $allowed_devices_file {
+    file{ "$allowed_devices_file":
+      ensure  => file,
+      content => template('slurm/cgroup_allowed_devices_file.conf.erb'),
+      owner   => 'slurm',
+      group   => 'slurm',
+      mode    => '0644',
+      require => User['slurm'],
+    }
   }
 }
