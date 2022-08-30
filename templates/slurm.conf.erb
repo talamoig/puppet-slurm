@@ -211,16 +211,16 @@ Waittime=<%= @wait_time %>
 
 # SCHEDULING
 <%= @def_cpu_per_gpu.nil? ? '#DefCpuPerGPU=' : ('DefCpuPerGPU=' + @def_cpu_per_gpu.to_s) %>
-<%= @def_mem_per_cpu==0 ? '#DefMemPerCPU=' : ('DefMemPerCPU=' + @def_mem_per_cpu.to_s) %>
-<%= @def_mem_per_gpu==0 ? '#DefMemPerGPU=' : ('DefMemPerGPU=' + @def_mem_per_gpu.to_s) %>
-<%= @def_mem_per_node==0 ? '#DefMemPerNode=' : ('DefMemPerNode=' + @def_mem_per_node.to_s) %>
+<%= @def_mem_per_cpu.nil? ? '#DefMemPerCPU=' : ('DefMemPerCPU=' + @def_mem_per_cpu.to_s) %>
+<%= @def_mem_per_gpu.nil? ? '#DefMemPerGPU=' : ('DefMemPerGPU=' + @def_mem_per_gpu.to_s) %>
+<%= @def_mem_per_node.nil? ? '#DefMemPerNode=' : ('DefMemPerNode=' + @def_mem_per_node.to_s) %>
 <%= @epilog.nil? ? '#Epilog=' : ('Epilog=' + @epilog) %>
 <%= @epilog_slurmctld.nil? ? '#EpilogSlurmctld=' : ('EpilogSlurmctld=' + @epilog_slurmctld) %>
 <% unless @fast_schedule.nil? -%>FastSchedule=<%= @fast_schedule %>
 <% end -%>
 MaxArraySize=<%= @max_array_size %>
-MaxMemPerCPU=<%= @max_mem_per_cpu %>
-MaxMemPerNode=<%= @max_mem_per_node %>
+<%= @max_mem_per_cpu.nil? ? '#MaxMemPerCPU=' : ('MaxMemPerCPU=' + @max_mem_per_cpu.to_s) %>
+<%= @max_mem_per_node.nil? ? '#MaxMemPerNode=' : ('MaxMemPerNode=' + @max_mem_per_node.to_s) %>
 MaxTasksPerNode=<%= @max_tasks_per_node %>
 MpiDefault=<%= @mpi_default %>
 <%= @mpi_params.nil? ? '#MpiParams=' : ('MpiParams=' + @mpi_params) %>
