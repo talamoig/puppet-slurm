@@ -21,6 +21,8 @@ AllowSpecResourcesUsage=<%= @allow_spec_resources_usage %>
 <% unless @checkpoint_type.nil? -%>CheckpointType=<%= @checkpoint_type %>
 <% end -%>
 <%= @chos_loc.nil? ? '#ChosLoc=' : ('ChosLoc=' + @chos_loc) %>
+<% unless @communication_parameters.nil? -%>CommunicationParameters=<%= @communication_parameters.join(',') %>
+<% end -%>
 CoreSpecPlugin=<%= @core_spec_plugin %>
 CpuFreqDef=<%= @cpu_freq_def %>
 CpuFreqGovernors=<%= @cpu_freq_governors.join(',') %>
@@ -376,7 +378,7 @@ SlurmSchedLogLevel=<%= @slurm_sched_log_level %>
 
 # HEALTH CHECK
 <%= @health_check_program.nil? ? '#HealthCheckProgram=' : ('HealthCheckProgram=' + @health_check_program) %>
-HealthCheckNodeState=<%= @health_check_node_state %>
+HealthCheckNodeState=<%= @health_check_node_state.join(',') %>
 HealthCheckInterval=<%= @health_check_interval %>
 
 
