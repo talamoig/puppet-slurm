@@ -27,7 +27,8 @@ CgroupMountpoint=<%= @cgroup_mountpoint %>
 
 # CPU
 ConstrainCores=<%= @constrain_cores %>
-TaskAffinity=<%= @task_affinity %>
+<% unless @task_affinity.nil? -%>TaskAffinity=<%= @task_affinity %>
+<% end -%>
 
 # Memory
 ConstrainRAMSpace=<%= @constrain_ram_space %>
@@ -50,4 +51,6 @@ MaxKmemPercent=<%= @max_kmem_percent %>
 
 # Devices
 ConstrainDevices=<%= @constrain_devices %>
-AllowedDevicesFile=<%= @allowed_devices_file %>
+<% unless @allowed_devices_file.nil? -%>AllowedDevicesFile=<%= @allowed_devices_file %>
+<% end -%>
+

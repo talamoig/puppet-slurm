@@ -33,7 +33,7 @@ class slurm::config::cgroup (
   Enum['no','yes'] $cgroup_automount = 'no',
   String $cgroup_mountpoint = '/sys/fs/cgroup',
   Enum['no','yes'] $constrain_cores = 'no',
-  Enum['no','yes'] $task_affinity = 'no',
+  Optional[Enum['no','yes']] $task_affinity = undef,
   Enum['no','yes'] $constrain_ram_space = 'no',
   Float[0,100] $allowed_ram_space = 100.0,
   Integer[0] $min_ram_space = 30,
@@ -46,7 +46,7 @@ class slurm::config::cgroup (
   Integer[0] $min_kmem_space = 30,
   Float[0,100] $max_kmem_percent = 100.0,
   Enum['no','yes'] $constrain_devices = 'no',
-  String $allowed_devices_file = '/etc/slurm/cgroup_allowed_devices_file.conf',
+  Optional[String] $allowed_devices_file = undef,
   Array $allowed_devices_list = [],
 ) {
 
@@ -61,12 +61,14 @@ class slurm::config::cgroup (
   }
 
   # Cgroup Device list configuration
-  file{ "$allowed_devices_file":
-    ensure  => file,
-    content => template('slurm/cgroup_allowed_devices_file.conf.erb'),
-    owner   => 'slurm',
-    group   => 'slurm',
-    mode    => '0644',
-    require => User['slurm'],
+  if $allowed_devices_file {
+    file{ "$allowed_devices_file":
+      ensure  => file,
+      content => template('slurm/cgroup_allowed_devices_file.conf.erb'),
+      owner   => 'slurm',
+      group   => 'slurm',
+      mode    => '0644',
+      require => User['slurm'],
+    }
   }
 }
