@@ -30,7 +30,7 @@
 #
 
 class slurm::config::cgroup (
-  Enum['no','yes'] $cgroup_automount = 'no',
+  Optional[Enum['no','yes']] $cgroup_automount = versioncmp($slurm::params::slurm_version, '23.11') >= 0 ? { true => undef, false => 'no' },
   String $cgroup_mountpoint = '/sys/fs/cgroup',
   Enum['no','yes'] $constrain_cores = 'no',
   Optional[Enum['no','yes']] $task_affinity = undef,
@@ -41,10 +41,10 @@ class slurm::config::cgroup (
   Enum['no','yes'] $constrain_swap_space = 'no',
   Float[0,100] $allowed_swap_space = 0.0,
   Float[0,100] $max_swap_percent = 100.0,
-  Enum['no','yes'] $constrain_kmem_space = 'yes',
+  Optional[Enum['no','yes']] $constrain_kmem_space = versioncmp($slurm::params::slurm_version, '23.02') >= 0 ? { true => undef, false => 'yes' },
   Optional[Float[0]] $allowed_kmem_space = undef,
-  Integer[0] $min_kmem_space = 30,
-  Float[0,100] $max_kmem_percent = 100.0,
+  Optional[Integer[0]] $min_kmem_space = versioncmp($slurm::params::slurm_version, '23.02') >= 0 ? { true => undef, false => 30 },
+  Optional[Float[0,100]] $max_kmem_percent = versioncmp($slurm::params::slurm_version, '23.02') >= 0 ? { true => undef, false => 100.0 },
   Enum['no','yes'] $constrain_devices = 'no',
   Optional[String] $allowed_devices_file = undef,
   Array $allowed_devices_list = [],

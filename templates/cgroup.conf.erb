@@ -18,7 +18,8 @@
 #################################
 # General cgroup options
 
-CgroupAutomount=<%= @cgroup_automount %>
+<% unless @cgroup_automount.nil? -%>CgroupAutomount=<%= @cgroup_automount %>
+<% end -%>
 CgroupMountpoint=<%= @cgroup_mountpoint %>
 
 
@@ -41,13 +42,16 @@ ConstrainSwapSpace=<%= @constrain_swap_space %>
 AllowedSwapSpace=<%= @allowed_swap_space %>
 MaxSwapPercent=<%= @max_swap_percent %>
 
-# Kernel Memory
-ConstrainKmemSpace=<%= @constrain_kmem_space %>
-<% unless @allowed_kmem_space.nil? -%>
-AllowedKmemSpace=<%= @allowed_kmem_space %>
+<% unless @constrain_kmem_space.nil? && @allowed_kmem_space.nil? && @min_kmem_space.nil? && @max_kmem_percent.nil? %># Kernel Memory
+<% end -%> 
+<% unless @constrain_kmem_space.nil? -%>ConstrainKmemSpace=<%= @constrain_kmem_space %>
 <% end -%>
-MinKmemSpace=<%= @min_kmem_space %>
-MaxKmemPercent=<%= @max_kmem_percent %>
+<% unless @allowed_kmem_space.nil? -%>AllowedKmemSpace=<%= @allowed_kmem_space %>
+<% end -%>
+<% unless @min_kmem_space.nil? -%>MinKmemSpace=<%= @min_kmem_space %>
+<% end -%>
+<% unless @max_kmem_percent.nil? -%>MaxKmemPercent=<%= @max_kmem_percent %>
+<% end -%>
 
 # Devices
 ConstrainDevices=<%= @constrain_devices %>
