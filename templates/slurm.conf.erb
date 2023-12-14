@@ -30,8 +30,10 @@ CpuFreqDef=<%= @cpu_freq_def %>
 CpuFreqGovernors=<%= @cpu_freq_governors.join(',') %>
 DisableRootJobs=<%= @disable_root_jobs %>
 EnforcePartLimits=<%= @enforce_part_limits %>
-ExtSensorsType=<%= @ext_sensors_type %>
-ExtSensorsFreq=<%= @ext_sensors_freq %>
+<% unless @ext_sensors_type.nil? -%>ExtSensorsType=<%= @ext_sensors_type %>
+<% end -%>
+<% unless @ext_sensors_freq.nil? -%>ExtSensorsFreq=<%= @ext_sensors_freq %>
+<% end -%>
 FirstJobId=<%= @first_job_id %>
 MaxJobId=<%= @max_job_id %>
 <%= @federation_parameters.nil? ? '#FederationParameters=' : ('FederationParameters=' + @federation_parameters.join(',')) %>
