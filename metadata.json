@@ -1,0 +1,38 @@
+{
+  "name": "puppet-slurm",
+  "version": "v23.11.3",
+  "summary": "Manages Slurm",
+  "license": "Apache-2.0",
+  "source": "https://github.com/paulscherrerinstitute/puppet-slurm",
+  "project_page": "https://github.com/paulscherrerinstitute/puppet-slurm",
+  "issues_url": "https://github.com/paulscherrerinstitute/puppet-slurm/issues",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "OracleLinux"
+    },
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "Scientific"
+    },
+    {
+      "operatingsystem": "Fedora"
+    },
+    {
+      "operatingsystem": "Rocky"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.0.0 < 9.0.0"
+    }
+  ]
+}

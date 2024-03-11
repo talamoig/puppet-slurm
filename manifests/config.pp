@@ -167,10 +167,10 @@ class slurm::config (
   Enum['NO','YES'] $priority_favor_small = 'NO',
   String $priority_max_age = '7-0',
   Enum['NONE','NOW','DAILY','WEEKLY','MONTHLY','QUARTERLY','YEARLY'] $priority_usage_reset_period = 'NONE',
+  Integer[0] $fair_share_dampening_factor = 1,
   Integer[0] $priority_weight_age = 0,
-  Integer[0] $priority_weight_fairshare = 0,
-  Optional[Integer[0]] $fair_share_dampening_factor = versioncmp($slurm::params::slurm_version, '22.05') >= 0 ? { true => undef, false => 1 },
   Optional[Integer[0]] $priority_weight_assoc = versioncmp($slurm::params::slurm_version, '22.05') >= 0 ? { true => 0, false => undef },
+  Integer[0] $priority_weight_fairshare = 0,
   Integer[0] $priority_weight_job_size = 0,
   Integer[0] $priority_weight_partition = 0,
   Integer[0] $priority_weight_qos = 0,
@@ -351,6 +351,7 @@ class slurm::config (
       owner   => 'slurm',
       group   => 'slurm',
       mode    => '0644',
+      require => User['slurm'],
     }
 
     # Plugin loader
@@ -360,6 +361,7 @@ class slurm::config (
       owner   => 'slurm',
       group   => 'slurm',
       mode    => '0644',
+      require => User['slurm'],
     }
 
     # Accounting gatherer configuration file

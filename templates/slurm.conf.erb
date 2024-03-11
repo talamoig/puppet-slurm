@@ -275,6 +275,8 @@ PriorityUsageResetPeriod=<%= @priority_usage_reset_period %>
 PriorityWeightAge=<%= @priority_weight_age %>
 PriorityWeightFairshare=<%= @priority_weight_fairshare %>
 FairShareDampeningFactor=<%= @fair_share_dampening_factor %>
+<% unless @priority_weight_assoc.nil? -%>PriortyWeightAssoc=<%= @priority_weight_assoc %>
+<% end -%>
 PriorityWeightJobSize=<%= @priority_weight_job_size %>
 PriorityWeightPartition=<%= @priority_weight_partition %>
 PriorityWeightQOS=<%= @priority_weight_qos %>
