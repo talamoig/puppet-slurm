@@ -1,6 +1,6 @@
 {
   "name": "puppet-slurm",
-  "version": "v23.11.3",
+  "version": "23.11.3",
   "summary": "Manages Slurm",
   "license": "Apache-2.0",
   "source": "https://github.com/paulscherrerinstitute/puppet-slurm",
