@@ -1,6 +1,7 @@
 {
   "name": "puppet-slurm",
   "version": "23.11.3",
+  "author": "Marc Caubet Serrabou",
   "summary": "Manages Slurm",
   "license": "Apache-2.0",
   "source": "https://github.com/paulscherrerinstitute/puppet-slurm",
