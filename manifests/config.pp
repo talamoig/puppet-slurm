@@ -246,7 +246,8 @@ class slurm::config (
 
   Boolean $open_firewall = false,
   Array[String] $munge_packages = $slurm::params::munge_packages,
-
+  Optional[String] $include_file = undef,
+  Boolean $include_only = false,
 ) inherits slurm::params {
 
   # The following variables are version dependent

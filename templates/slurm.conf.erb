@@ -15,6 +15,10 @@
 #
 # Configuration file containing common parameters for headnode and workernode.
 #
+<% if @include_file -%>
+Include <%= @include_file %>
+<% end -%>
+<% if @include_only == false -%>
 
 # GENERAL OPTIONS
 AllowSpecResourcesUsage=<%= @allow_spec_resources_usage %>
@@ -423,4 +427,5 @@ TreeWidth=<%= @tree_width %>
 # PARTITIONS
 <% @partitions.each do |partition| -%>
 <%= partition.map{|pair| pair.join('=')}.join(' ') %>
+<% end -%>
 <% end -%>
