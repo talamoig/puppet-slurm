@@ -13,23 +13,24 @@
 
 class slurm::workernode::config (
   Optional[String] $slurmd_options = undef,
+  Boolean $manage_slurmd = true,
   Boolean $refresh_service = true,
 ) {
-
-  if $slurmd_options {
-    file { "/etc/sysconfig/slurmd":
+  if $manage_slurmd {
+    if $slurmd_options {
+      file { "/etc/sysconfig/slurmd":
       before  => Service["slurmd"],
-      content => @("END"),
-          SLURMD_OPTIONS="$slurmd_options"
-          | END
-    }
-  } else {
-    file { "/etc/sysconfig/slurmd":
-      before  => Service["slurmd"],
-      ensure  => absent;
+        content => @("END"),
+           SLURMD_OPTIONS="$slurmd_options"
+           | END
+      }
+    } else {
+      file { "/etc/sysconfig/slurmd":
+        before  => Service["slurmd"],
+        ensure  => absent;
+      }
     }
   }
-
   service{'slurmd':
     ensure    => running,
     enable    => true,
